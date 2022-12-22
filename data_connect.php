@@ -1,16 +1,27 @@
 <?php
-    $host = "localhost";
-    $user = "root";
-    $pass = "";
-    $db = "kkp";
+    $server = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "kkp";
     // $connect = mysqli_connect($host, $user, $pass, $db);
     // if(!$connect){
     //     die("Koneksi gagal". mysqli_connect_error());
     // }
 
-    $pdo = new PDO('mysql:host='.$host.';db'.$db, $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+    try{
+        $connect = new PDO("mysql:host=$server; dbname=$dbname", "$username", "$password");
+        $connect->setAttribute(
+            PDO::ATTR_ERRMODE,
+            PDO::ERRMODE_EXCEPTION
+        );
+    }
+    catch(PDOException $e) {
+        die('Unable to connect with database');
+    }
+
+    // $pdo = new PDO('mysql:host='.$host.';db'.$db, $user, $pass);
+    // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
     //sql create table
     // $user = "CREATE TABLE user (
     //     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY NOT NULL,

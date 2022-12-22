@@ -1,3 +1,51 @@
+<?php
+include "data_connect.php";
+   
+if(isset($_POST['submit'])) {
+  
+    // Count total files
+    $countfiles = count($_FILES['files']['name']);
+   
+    // Prepared statement
+    $query = "INSERT INTO users (nama_lengkap, tempat_lahir, tanggal_lahir, jenis_kelamin, alamat_lengkap, email, nomor_telepon, NIK, passwd, pass_foto) VALUES(?,?,?,?,?,?,?,?,?,?)";
+  
+    $statement = $connnect->prepare($query);
+  
+    // Loop all files
+    for($i = 0; $i < $countfiles; $i++) {
+  
+        // File name
+        $filename = $_FILES['files']['name'][$i];
+      
+        // Location
+        $target_file = 'images/'.$filename;
+      
+        // file extension
+        $file_extension = pathinfo($target_file, PATHINFO_EXTENSION);
+             
+        $file_extension = strtolower($file_extension);
+      
+        // Valid image extension
+        $valid_extension = array("png","jpeg","jpg");
+      
+        if(in_array($file_extension, $valid_extension)) {
+  
+            // Upload file
+            if(move_uploaded_file(
+                $_FILES['files']['tmp_name'][$i],
+                $target_file)
+            ) {
+                // Execute query
+                $statement->execute(
+                    array($filename,$target_file));
+            }
+        }
+    }
+     
+    echo "File upload successfully";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -26,7 +74,7 @@
           Portal pendaftaran CASN KKP Jatim
         </a>
         <div class="d-flex justify-content-end ms-auto">
-          <div class="p-2"><a href="home">Home</a></div>
+          <div class="p-2"><a href="index.html">Home</a></div>
           <div class="p-2"><button type="button" class="btn btn-primary">Login</button></div>
         </div>
       </div>
@@ -36,7 +84,7 @@
         Form Pendaftaran Calon Peserta Ujian
       </h3>
     </div>
-    <form method="post" action="proses_daftar.php" enctype="multipart/form-data">
+    <form method="post" action= 'view_user.php' enctype="multipart/form-data">
       <fieldset>
       <div class="mt-5 mb-3 px-4">
         <label for="exampleFormControlInput1" class="form-label">Nama Lengkap</label>
@@ -124,7 +172,7 @@
       </div>
     <div class="mb-3 px-4">
       <label for="formFile" class="form-label">Upload Foto (jpg/png)</label>
-      <input class="form-control" type="file" name="foto" id="formFile" />
+      <input class="form-control" type="file" name='files[]' multiple id="formFile" />
     </div>
     <!-- <div class="mb-3 px-4 mt-3">
       <label for="formFile" class="form-label">Upload Ijazah (jpg/png)</label>

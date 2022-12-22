@@ -1,3 +1,10 @@
+<?php
+  session_start();
+	
+	if(isset($_SESSION['submit'])){
+		header("Location: index.php");
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,8 +60,7 @@
                 </label>
               </div>
               <div class="d-grid">
-                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Sign
-                  in</button>
+                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Log in</button>
               </div>
               <hr class="my-4">
               <!-- <div class="d-grid mb-2">
